@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>祥林嫂时期 · 彷徨者档案</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700;900&family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:    #ebe1c8;
+    --paper-2:  #d9cba6;
+    --ink:      #1a1814;
+    --ink-2:    #3a342a;
+    --vermilion:#9b1c1c;
+    --seal:     #b8302e;
+    --tea:      #6b5a3e;
+    --grid:     #c9b888;
+  }
+  * { -webkit-font-smoothing: antialiased; }
+  html, body { background: var(--paper); color: var(--ink); }
+  body {
+    font-family: 'Noto Serif SC', 'Songti SC', serif;
+    background:
+      radial-gradient(ellipse at 15% 5%, rgba(155,28,28,.06), transparent 50%),
+      radial-gradient(ellipse at 85% 95%, rgba(26,24,20,.08), transparent 50%),
+      var(--paper);
+    background-attachment: fixed;
+  }
+
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  .brush { font-family: 'Ma Shan Zheng', 'Noto Serif SC', serif; }
+  .lishu { font-family: 'ZCOOL XiaoWei', 'Noto Serif SC', serif; letter-spacing: .1em; }
+  .vert { writing-mode: vertical-rl; text-orientation: upright; }
+
+  .paper-bg {
+    background:
+      radial-gradient(circle at 12% 28%, rgba(107,90,62,.15) 0, transparent 4%),
+      radial-gradient(circle at 78% 62%, rgba(107,90,62,.12) 0, transparent 5%),
+      radial-gradient(circle at 35% 88%, rgba(155,28,28,.08) 0, transparent 3%),
+      var(--paper);
+  }
+  .paper-bg::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.42 0 0 0 0 0.35 0 0 0 0 0.24 0 0 0 .25 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: .55; mix-blend-mode: multiply;
+  }
+  .grid-lines {
+    background-image:
+      linear-gradient(0deg, transparent 31px, rgba(26,24,20,.06) 32px),
+      linear-gradient(90deg, transparent 31px, rgba(26,24,20,.04) 32px);
+    background-size: 32px 32px;
+  }
+
+  .seal {
+    color: var(--seal);
+    border: 3px double var(--seal);
+    font-weight: 900;
+    letter-spacing: .3em;
+    transform: rotate(-6deg);
+    box-shadow: inset 0 0 0 1px var(--seal);
+    background: rgba(184,48,46,.05);
+  }
+  .seal-square {
+    color: var(--seal);
+    border: 2px solid var(--seal);
+    font-family: 'Ma Shan Zheng', serif;
+    background: rgba(184,48,46,.04);
+  }
+
+  .red-mark {
+    background-image: linear-gradient(transparent 75%, rgba(184,48,46,.5) 75%);
+  }
+  .red-strike { text-decoration: line-through; text-decoration-color: var(--seal); text-decoration-thickness: 2px; }
+
+  .double-rule {
+    border-top: 3px double var(--ink);
+    border-bottom: 1px solid var(--ink);
+    padding: 6px 0;
+  }
+
+  .ink-btn {
+    background: var(--ink); color: var(--paper);
+    transition: all .2s; border: 1px solid var(--ink);
+    font-family: 'Noto Serif SC', serif; font-weight: 700;
+    letter-spacing: .15em;
+  }
+  .ink-btn:hover { background: var(--vermilion); border-color: var(--vermilion); }
+
+  .ghost-btn {
+    border: 1px solid var(--ink-2); color: var(--ink);
+    transition: all .2s; background: transparent;
+  }
+  .ghost-btn:hover { background: var(--ink); color: var(--paper); }
+
+  .vermilion-btn {
+    background: var(--vermilion); color: var(--paper);
+    border: 1px solid var(--vermilion);
+    transition: all .2s; letter-spacing: .15em;
+  }
+  .vermilion-btn:hover { background: var(--ink); border-color: var(--ink); }
+
+  .stamp-in { animation: stampIn .5s cubic-bezier(.2,.7,.2,1.4); }
+  @keyframes stampIn {
+    0% { transform: scale(2.5) rotate(-20deg); opacity: 0; }
+    100% { transform: scale(1) rotate(-6deg); opacity: 1; }
+  }
+
+  textarea, input {
+    font-family: 'Noto Serif SC', serif;
+  }
+  textarea::placeholder, input::placeholder {
+    color: rgba(26,24,20,.35); font-style: italic;
+  }
+
+  .tag {
+    background: rgba(184,48,46,.08);
+    border: 1px solid rgba(184,48,46,.45);
+    color: var(--vermilion);
+    font-weight: 500;
+  }
+  .tag.active {
+    background: var(--vermilion); color: var(--paper);
+  }
+
+  .tab-active {
+    color: var(--vermilion);
+    border-bottom: 2px solid var(--vermilion);
+  }
+
+  details > summary { list-style: none; cursor: pointer; }
+  details > summary::-webkit-details-marker { display: none; }
+
+  .pull-quote {
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 900;
+    line-height: 1.1;
+  }
+
+  .splash-bg {
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(155,28,28,.12), transparent 50%),
+      radial-gradient(ellipse at 70% 80%, rgba(26,24,20,.15), transparent 50%),
+      var(--paper);
+  }
+
+  .ripped-divider {
+    height: 24px;
+    background:
+      linear-gradient(to bottom, var(--paper) 50%, transparent 50%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='12' viewBox='0 0 40 12'%3E%3Cpath d='M0 6 Q 5 0, 10 6 T 20 6 T 30 6 T 40 6' stroke='%231a1814' fill='none' stroke-width='1'/%3E%3C/svg%3E");
+  }
+
+  .scribble-circle {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60'%3E%3Cellipse cx='50' cy='30' rx='45' ry='22' fill='none' stroke='%23b8302e' stroke-width='2.5' stroke-dasharray='4 2'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
+  }
+
+  .luxun-icon {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--paper);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Ma Shan Zheng', serif;
+    font-size: 22px;
+  }
+
+  .vintage-footer {
+    border-top: 1px solid var(--ink);
+    border-bottom: 3px double var(--ink);
+  }
+
+  .quiz-option {
+    border: 1px solid var(--ink-2);
+    transition: all .2s;
+  }
+  .quiz-option:hover {
+    background: var(--ink); color: var(--paper);
+    transform: translateX(4px);
+  }
+  .quiz-option.selected {
+    background: var(--vermilion); color: var(--paper);
+    border-color: var(--vermilion);
+  }
+</style>
+</head>
+<body>
+
+<section id="splash" class="min-h-screen splash-bg relative overflow-hidden">
+  <div class="absolute top-6 left-6 seal px-3 py-1.5 text-[11px] mono z-10" style="transform: rotate(-12deg);">
+    民国 · 内部传阅
+  </div>
+  <div class="absolute top-6 right-6 text-right text-[11px] mono opacity-70 z-10">
+    <div>第 ＸＸ 期</div>
+    <div id="splashDate">公历 二○二六年</div>
+  </div>
+
+  <div class="hidden md:block absolute left-4 top-1/2 -translate-y-1/2 vert text-xs opacity-30 tracking-widest">
+    向 来 是 不 惮 以 最 坏 的 恶 意 来 揣 测 ＨＲ 的
+  </div>
+  <div class="hidden md:block absolute right-4 top-1/2 -translate-y-1/2 vert text-xs opacity-30 tracking-widest">
+    沉 默 呵 沉 默 呵 不 在 沉 默 中 内 推 就 在 沉 默 中 失 业
+  </div>
+
+  <div class="max-w-3xl mx-auto pt-16 px-6">
+    <div class="double-rule flex items-center justify-between text-[11px] mono">
+      <span>ODYSSEY · 彷徨者档案</span>
+      <span class="brush text-base tracking-wider">第 壹 期</span>
+      <span>WHINING ERA</span>
+    </div>
+  </div>
+
+  <div class="max-w-3xl mx-auto px-6 mt-10 relative">
+    <div class="text-center text-sm tracking-[.4em] opacity-70 mb-3 lishu">━━ 一份关于过渡期的诊断报告 ━━</div>
+    <h1 class="brush text-center leading-none relative" style="font-size: clamp(48px, 14vw, 150px); color: var(--ink);">
+      <span class="relative inline-block whitespace-nowrap">
+        祥林嫂时期
+        <span class="absolute -top-1 -right-4 md:-top-2 md:-right-6 text-[var(--vermilion)] brush whitespace-nowrap" style="font-size: 32%; transform: rotate(8deg);">·新解·</span>
+      </span>
+    </h1>
+    <div class="my-6 flex items-center gap-3">
+      <div class="flex-1 h-px bg-[var(--ink)]"></div>
+      <span class="text-xs mono opacity-60">TORN HERE</span>
+      <div class="flex-1 h-px bg-[var(--ink)]"></div>
+    </div>
+    <div class="text-center mono text-[11px] tracking-[.3em] opacity-60">
+      THE / WHINING / ERA &nbsp;·&nbsp; XIANG LIN SAO SHI QI
+    </div>
+  </div>
+
+  <div class="max-w-2xl mx-auto px-6 mt-12 relative">
+    <div class="paper-bg relative p-7 md:p-10 grid-lines" style="border: 1px solid var(--ink); box-shadow: 6px 6px 0 var(--ink);">
+      <div class="absolute -top-4 -right-4 seal-square px-2 py-1 text-xs" style="transform: rotate(8deg);">必 读</div>
+      <p class="text-xs tracking-widest opacity-60 mono mb-3">编者按 · PREFACE</p>
+      <p class="text-base md:text-lg leading-loose">诸君听说过 <b class="red-mark">奥德赛时期</b> 么？</p>
+      <p class="text-base md:text-lg leading-loose mt-4">西方人讲，二十出头的青年，毕业未稳、就业未定、爱情未明，飘飘荡荡，如海上孤舟，谓之 <i>Odyssey Years</i>。听起来颇有些<span class="red-strike">英雄主义</span>的意味。</p>
+      <p class="text-base md:text-lg leading-loose mt-4">然而到了我们这里，<span class="brush text-2xl text-[var(--vermilion)]">实在是要朴素得多</span>——</p>
+      <p class="text-base md:text-lg leading-loose mt-4">实习还没转正，秋招又要开始；暑期实习一份未投，春招的拒信倒收了一打。每见朋友一面，便要把同一段苦楚<span class="red-mark">复述一遍</span>，说罢看见他眉头紧皱，便又自责<span class="red-strike">扰人清梦</span>，过了两日，遇见新朋友，<b class="brush text-xl text-[var(--vermilion)]">却又忍不住再说一遍</b>。</p>
+      <div class="my-8 pl-6 border-l-4 border-[var(--vermilion)] relative">
+        <span class="absolute -left-3 -top-2 text-4xl text-[var(--vermilion)] brush">「</span>
+        <p class="pull-quote text-2xl md:text-3xl">这哪里是什么奥德赛——<br><span class="text-[var(--vermilion)]">分明是祥林嫂时期。</span></p>
+        <span class="absolute -right-2 -bottom-4 text-4xl text-[var(--vermilion)] brush">」</span>
+      </div>
+      <p class="text-base md:text-lg leading-loose">本档案馆专为此辈而设。<br>我们不疗伤、不鸡汤、不催促你"积极向上"。<br>只做一件事——</p>
+      <p class="mt-4 text-lg md:text-xl brush text-center text-[var(--ink)]">把你悬在半空的日子，<span class="text-[var(--vermilion)]">一字不漏地</span>记下来。</p>
+      <div class="mt-8 flex items-center justify-between text-xs opacity-70">
+        <span class="lishu tracking-widest">—— 编者 谨识</span>
+        <span class="seal-square px-2 py-1" style="transform: rotate(-4deg);">阅</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-2xl mx-auto px-6 mt-12 text-center relative">
+    <p class="text-sm opacity-70 mb-5 tracking-widest lishu">—— 在归档之前，先来诊一诊脉 ——</p>
+    <button id="startQuizBtn" class="vermilion-btn px-10 py-4 text-base md:text-lg brush relative group">
+      <span class="relative">测一测我的祥林嫂指数</span>
+      <span class="ml-2 inline-block group-hover:translate-x-1 transition-transform">→</span>
+    </button>
+    <div class="mt-3 mono text-[11px] opacity-50 tracking-widest">15 道题 · 戏谑鲁迅文风 · 立即出报告</div>
+    <div class="my-8 ripped-divider"></div>
+    <button id="skipQuizBtn" class="ghost-btn px-7 py-2.5 text-sm tracking-widest">跳过 · 直接进入档案馆</button>
+  </div>
+
+  <div class="max-w-3xl mx-auto px-6 mt-20 pb-10">
+    <div class="vintage-footer py-3 text-center text-[11px] mono opacity-60 tracking-widest">记 录 · 复 述 · 归 档 &nbsp;//&nbsp; RECORD · REPEAT · ARCHIVE</div>
+  </div>
+</section>
+
+<section id="quiz" class="hidden min-h-screen splash-bg">
+  <div class="max-w-2xl mx-auto px-6 py-10">
+    <div class="double-rule flex items-center justify-between text-[11px] mono mb-8">
+      <span>诊脉 · DIAGNOSIS</span>
+      <span class="brush text-base">脉案 第 <span id="quizNum">1</span> 问</span>
+      <span>共 15 问</span>
+    </div>
+    <div class="h-1 bg-[var(--ink)]/10 rounded-full overflow-hidden mb-10">
+      <div id="quizProgress" class="h-full bg-[var(--vermilion)] transition-all duration-500" style="width:20%"></div>
+    </div>
+    <div id="quizBox"></div>
+    <div class="mt-10 flex justify-between">
+      <button id="quizBackBtn" class="ghost-btn px-5 py-2 text-sm">← 上一题</button>
+      <button id="quizSkipAllBtn" class="text-sm opacity-50 hover:opacity-100 underline underline-offset-4">不测了，跳过</button>
+    </div>
+  </div>
+</section>
+
+<section id="quizResult" class="hidden min-h-screen splash-bg">
+  <div class="max-w-2xl mx-auto px-6 py-10">
+    <div class="double-rule flex items-center justify-between text-[11px] mono mb-8">
+      <span>诊断书 · CERTIFICATE</span>
+      <span class="brush text-base">出 具</span>
+      <span id="resultDateLabel"></span>
+    </div>
+    <div id="resultCard" class="paper-bg relative p-8 md:p-10 grid-lines" style="border: 1px solid var(--ink); box-shadow: 6px 6px 0 var(--ink);">
+      <div class="absolute top-5 right-5 seal px-3 py-1 text-[11px] mono">DIAGNOSIS</div>
+      <p class="mono text-[11px] opacity-60 tracking-widest mb-2">姓 名：阁下 · 性别：彷徨</p>
+      <p class="mono text-[11px] opacity-60 tracking-widest mb-6">就 诊 日 期：<span id="resultDate"></span></p>
+      <div class="text-center my-8">
+        <div id="resultEmoji" class="text-7xl mb-4 inline-block stamp-in">🌱</div>
+        <div class="brush text-3xl md:text-4xl" id="resultRank">祥林嫂预备役</div>
+        <div class="text-sm opacity-70 mt-3 italic" id="resultDesc">有苗头，但还在硬撑体面</div>
+        <div class="mt-8 inline-block scribble-circle px-12 py-4">
+          <div class="mono text-[11px] opacity-60">指 数</div>
+          <div class="brush text-6xl text-[var(--vermilion)]" id="resultScore">42</div>
+          <div class="mono text-[11px] opacity-60">/ 100</div>
+        </div>
+      </div>
+      <div class="mt-6 pt-6 border-t border-[var(--ink)]/30">
+        <p class="brush text-lg text-[var(--vermilion)] mb-2">⊙ 医嘱：</p>
+        <p id="resultAdvice" class="text-base leading-loose"></p>
+      </div>
+      <div class="mt-8 flex items-center justify-between">
+        <span class="lishu tracking-widest text-xs opacity-60">—— 此致 即颂 内推 ——</span>
+        <span class="seal-square px-3 py-2 brush text-base">已诊</span>
+      </div>
+    </div>
+    <div class="mt-8 flex flex-col gap-3">
+      <button id="shareResultBtn" class="vermilion-btn px-8 py-3.5 text-base brush flex items-center justify-center gap-2">📸 截图分享报告</button>
+      <button id="enterAppBtn" class="ink-btn rounded px-8 py-3 text-base brush">进入档案馆 · 开始记录 →</button>
+      <button id="retakeQuizBtn" class="ghost-btn px-6 py-2.5 text-sm">重新诊一次</button>
+    </div>
+  </div>
+</section>
+
+<div id="mainApp" class="hidden">
+  <header class="sticky top-0 z-30" style="background: var(--paper); border-bottom: 3px double var(--ink);">
+    <div class="max-w-3xl mx-auto px-5 py-3">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="luxun-icon">迅</div>
+          <div>
+            <div class="brush text-xl leading-tight">祥林嫂时期</div>
+            <div class="mono text-[10px] opacity-60 tracking-widest">PEN.WHINING-ERA · 第 壹 期</div>
+          </div>
+        </div>
+        <div class="text-right text-[10px] mono opacity-60">
+          <div id="todayDate"></div>
+          <div>晴 / 心情阴</div>
+          <button id="backToSplashBtn" class="ghost-btn px-2 py-0.5 text-[10px] tracking-widest mt-1">↩ 回首页</button>
+        </div>
+      </div>
+      <div class="mt-3 flex gap-6 text-sm tracking-widest border-t border-[var(--ink)]/30 pt-2">
+        <button data-tab="feed" class="tab-btn pb-1 tab-active">碎 碎 念</button>
+        <button data-tab="index" class="tab-btn pb-1">指 数</button>
+        <button data-tab="capsule" class="tab-btn pb-1">胶 囊</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-5 py-8">
+    <section id="tab-feed" class="space-y-6">
+      <div class="paper-bg relative p-5 grid-lines" style="border: 1px solid var(--ink);">
+        <div class="flex items-center justify-between flex-wrap gap-3">
+          <div>
+            <div class="mono text-[10px] opacity-60 tracking-widest">CURRENT STATUS · 在档</div>
+            <div class="brush text-2xl mt-1">悬而未决 第 <span id="dayCount" class="text-[var(--vermilion)]">1</span> 天</div>
+          </div>
+          <div class="text-right">
+            <div class="mono text-[10px] opacity-60 tracking-widest">距 离 上 岸</div>
+            <div class="brush text-xl" id="upshoreCount">还有 ∞ 天</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="paper-bg relative p-6 grid-lines" style="border: 2px solid var(--tea); box-shadow: 4px 4px 0 var(--tea);">
+        <div class="flex items-center justify-between mb-3">
+          <span class="brush text-base" style="color: var(--tea);">▍今日积德（好事）</span>
+          <span class="mono text-[10px] opacity-50">可喜可贺</span>
+        </div>
+        <textarea id="newRecordPos" rows="3" class="w-full bg-transparent outline-none resize-none text-base leading-loose" placeholder="今日终有回音，虽未至，然已见灯火。"></textarea>
+        <div class="mt-3 pt-3 border-t border-dashed border-[var(--ink)]/30 flex flex-wrap items-center gap-2">
+          <span class="mono text-[10px] opacity-50 mr-1">朱批:</span>
+          <button class="tag-btn-pos tag rounded-full px-3 py-0.5 text-xs" data-tag="小确幸">#小确幸</button>
+          <button class="tag-btn-pos tag rounded-full px-3 py-0.5 text-xs" data-tag="有进展">#有进展</button>
+          <button class="tag-btn-pos tag rounded-full px-3 py-0.5 text-xs" data-tag="拿到offer">#拿到offer</button>
+          <button class="tag-btn-pos tag rounded-full px-3 py-0.5 text-xs" data-tag="被夸了">#被夸了</button>
+        </div>
+        <div class="mt-3 flex items-center justify-between gap-3">
+          <input id="listenerInputPos" type="text" placeholder="今日 又 说 与 谁 听？（可选）" class="bg-transparent border-b border-[var(--ink)]/40 outline-none text-sm py-1 flex-1" />
+          <button id="submitPosBtn" class="ink-btn px-5 py-2 text-sm" style="background: var(--tea); border-color: var(--tea);">归 档 ↵</button>
+        </div>
+      </div>
+
+      <div class="paper-bg relative p-6 grid-lines" style="border: 2px solid var(--vermilion); box-shadow: 4px 4px 0 var(--vermilion);">
+        <div class="flex items-center justify-between mb-3">
+          <span class="brush text-base text-[var(--vermilion)]">▍今日记账（坏事）</span>
+          <span class="mono text-[10px] opacity-50">且说无妨</span>
+        </div>
+        <textarea id="newRecordNeg" rows="3" class="w-full bg-transparent outline-none resize-none text-base leading-loose" placeholder="我真傻，真的——我单知道……"></textarea>
+        <div class="mt-3 pt-3 border-t border-dashed border-[var(--ink)]/30 flex flex-wrap items-center gap-2">
+          <span class="mono text-[10px] opacity-50 mr-1">朱批:</span>
+          <button class="tag-btn-neg tag rounded-full px-3 py-0.5 text-xs" data-tag="emo">#emo</button>
+          <button class="tag-btn-neg tag rounded-full px-3 py-0.5 text-xs" data-tag="被拒">#被拒</button>
+          <button class="tag-btn-neg tag rounded-full px-3 py-0.5 text-xs" data-tag="HR鬼魂">#HR鬼魂</button>
+          <button class="tag-btn-neg tag rounded-full px-3 py-0.5 text-xs" data-tag="想躺平">#想躺平</button>
+        </div>
+        <div class="mt-3 flex items-center justify-between gap-3">
+          <input id="listenerInputNeg" type="text" placeholder="今日 又 说 与 谁 听？（可选）" class="bg-transparent border-b border-[var(--ink)]/40 outline-none text-sm py-1 flex-1" />
+          <button id="submitNegBtn" class="ink-btn px-5 py-2 text-sm">归 档 ↵</button>
+        </div>
+      </div>
+
+      <details class="paper-bg relative p-5 group" style="border: 1px solid var(--ink);">
+        <summary class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <span class="brush text-2xl">籤</span>
+            <div>
+              <div class="brush text-lg">今日抽签</div>
+              <div class="mono text-[10px] opacity-60">玄学解压 · 每日一笺</div>
+            </div>
+          </div>
+          <span class="mono text-xs opacity-40 group-open:hidden">展开 ↓</span>
+        </summary>
+        <div id="fortuneBox" class="mt-4 pt-4 border-t border-dashed border-[var(--ink)]/30">
+          <button id="drawBtn" class="ghost-btn rounded px-4 py-2 text-sm">抽 一 签</button>
+          <div id="fortuneText" class="mt-3 brush text-lg leading-relaxed text-[var(--vermilion)] opacity-0 transition-opacity duration-500"></div>
+        </div>
+      </details>
+
+      <div>
+        <div class="double-rule flex items-center justify-between mb-3">
+          <span class="brush text-lg">▍档 案</span>
+          <span id="recordCount" class="mono text-xs opacity-60">0 卷</span>
+        </div>
+        <div id="recordList" class="space-y-3"></div>
+        <div id="emptyState" class="paper-bg relative p-10 text-center" style="border: 1px dashed var(--ink);">
+          <div class="brush text-4xl mb-3 opacity-50">空</div>
+          <div class="text-sm opacity-70">尚 无 念 叨。</div>
+          <div class="mono text-[11px] mt-2 opacity-50">写下第一卷，让奥德赛时期正式入档</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-index" class="hidden">
+      <div id="indexCard" class="paper-bg relative p-8 grid-lines" style="border: 1px solid var(--ink); box-shadow: 6px 6px 0 var(--ink);">
+        <div class="absolute top-5 right-5 seal px-3 py-1 text-[11px] mono">DIAGNOSIS</div>
+        <div class="border-b border-[var(--ink)]/30 pb-3 mb-5">
+          <div class="mono text-[10px] opacity-60 tracking-widest">祥 林 嫂 诊 脉 报 告</div>
+          <div class="brush text-2xl mt-1">第 <span id="reportDay">1</span> 卷 · <span id="reportDate" class="opacity-70 text-base"></span></div>
+        </div>
+        <div class="text-center py-6">
+          <div id="rankEmoji" class="text-7xl mb-3">🌱</div>
+          <div id="rankName" class="brush text-3xl">祥林嫂预备役</div>
+          <div id="rankDesc" class="text-sm opacity-70 mt-2 italic">有苗头，但还在硬撑体面</div>
+          <div class="mt-8">
+            <div class="mono text-[10px] opacity-60 tracking-widest">祥 林 嫂 指 数</div>
+            <div class="flex items-baseline justify-center gap-1 mt-2">
+              <span id="totalScore" class="brush text-7xl text-[var(--vermilion)]">0</span>
+              <span class="text-xl opacity-50 mono">/100</span>
+            </div>
+            <div class="w-64 h-1.5 bg-[var(--ink)]/10 rounded-full mx-auto mt-3 overflow-hidden">
+              <div id="scoreBar" class="h-full transition-all duration-1000" style="width:0%; background: var(--vermilion);"></div>
+            </div>
+          </div>
+        </div>
+        <div class="border-t border-[var(--ink)]/30 pt-5">
+          <div class="brush text-sm mb-3">▍画 像</div>
+          <div class="space-y-3">
+            <div class="dim-row" data-key="repeat">
+              <div class="flex justify-between text-sm mb-1">
+                <span><span class="brush mr-1">复</span>复读率</span>
+                <span class="mono dim-val">0%</span>
+              </div>
+              <div class="h-1.5 bg-[var(--ink)]/10 overflow-hidden">
+                <div class="dim-bar h-full bg-[var(--vermilion)] transition-all duration-700" style="width:0%"></div>
+              </div>
+            </div>
+            <div class="dim-row" data-key="duration">
+              <div class="flex justify-between text-sm mb-1">
+                <span><span class="brush mr-1">耐</span>续航力</span>
+                <span class="mono dim-val">0%</span>
+              </div>
+              <div class="h-1.5 bg-[var(--ink)]/10 overflow-hidden">
+                <div class="dim-bar h-full bg-[var(--tea)] transition-all duration-700" style="width:0%"></div>
+              </div>
+            </div>
+            <div class="dim-row" data-key="spread">
+              <div class="flex justify-between text-sm mb-1">
+                <span><span class="brush mr-1">扩</span>扩散度</span>
+                <span class="mono dim-val">0%</span>
+              </div>
+              <div class="h-1.5 bg-[var(--ink)]/10 overflow-hidden">
+                <div class="dim-bar h-full bg-[var(--ink-2)] transition-all duration-700" style="width:0%"></div>
+              </div>
+            </div>
+            <div class="dim-row" data-key="intensity">
+              <div class="flex justify-between text-sm mb-1">
+                <span><span class="brush mr-1">浓</span>浓度</span>
+                <span class="mono dim-val">0%</span>
+              </div>
+              <div class="h-1.5 bg-[var(--ink)]/10 overflow-hidden">
+                <div class="dim-bar h-full bg-[var(--ink)] transition-all duration-700" style="width:0%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="border-t border-[var(--ink)]/30 mt-5 pt-5">
+          <div class="brush text-sm mb-2">▍本 期 金 句</div>
+          <div id="topPhrase" class="brush text-xl text-[var(--vermilion)]">"暂无数据，先去念叨几句吧"</div>
+          <div id="topPhraseMeta" class="mono text-[11px] opacity-60 mt-1"></div>
+        </div>
+        <div class="border-t border-[var(--ink)]/30 mt-5 pt-5">
+          <div class="brush text-sm mb-2">▍周 树 人 注</div>
+          <div id="luxunQuote" class="text-base italic opacity-85">"她大约的确是死了。"</div>
+        </div>
+        <div class="mt-6 pt-4 border-t border-[var(--ink)]/30 flex items-center justify-between">
+          <span class="lishu tracking-widest text-xs opacity-60">—— 此致 即颂 上岸 ——</span>
+          <span class="seal-square px-3 py-2 brush text-base">已诊</span>
+        </div>
+        <div class="text-center mt-6">
+          <div class="mono text-[10px] opacity-40 tracking-widest">PEN.WHINING-ERA</div>
+        </div>
+      </div>
+      <div class="mt-5 flex gap-3 justify-center">
+        <button id="refreshBtn" class="ghost-btn rounded px-5 py-2 text-sm">↻ 重新计算</button>
+        <button id="shareBtn" class="ink-btn rounded px-5 py-2 text-sm">📸 截图分享</button>
+      </div>
+
+      <div class="mt-6 paper-bg relative p-6 grid-lines" style="border: 1px solid var(--ink);">
+        <div class="double-rule flex items-center justify-between mb-4">
+          <span class="brush text-lg">▍诊 脉 旧 档</span>
+          <span id="quizHistoryCount" class="mono text-xs opacity-60">0 次</span>
+        </div>
+        <div id="quizHistoryList" class="space-y-2"></div>
+        <div id="quizHistoryEmpty" class="text-center text-sm opacity-50 py-4 hidden">尚 无 诊 脉 记 录。</div>
+      </div>
+    </section>
+
+    <section id="tab-capsule" class="hidden space-y-5">
+      <div class="paper-bg relative p-6" style="border: 1px solid var(--ink); box-shadow: 4px 4px 0 var(--ink);">
+        <div class="flex items-center gap-3 mb-3">
+          <span class="brush text-3xl">緘</span>
+          <div>
+            <div class="brush text-xl">时光胶囊</div>
+            <div class="mono text-[10px] opacity-60">致未来的阁下</div>
+          </div>
+        </div>
+        <textarea id="capsuleText" rows="5" class="w-full bg-transparent border-b border-[var(--ink)]/40 outline-none resize-none text-sm leading-loose" placeholder="亲爱的未来的我，当你打开这封信的时候……"></textarea>
+        <div class="mt-3 flex justify-end">
+          <button id="sealBtn" class="ink-btn rounded px-5 py-2 text-sm">🔒 封 存</button>
+        </div>
+      </div>
+      <div>
+        <div class="double-rule mb-3 brush text-lg">▍已 封 存</div>
+        <div id="capsuleList" class="space-y-3"></div>
+      </div>
+      <div class="paper-bg relative p-6 text-center" style="border: 2px dashed var(--vermilion);">
+        <div class="text-sm opacity-70 mb-3 lishu tracking-widest">如 阁 下 已 走 出 奥 德 赛</div>
+        <button id="upshoreBtn" class="vermilion-btn rounded-full px-8 py-3 text-sm brush">🌅 我 上 岸 了</button>
+        <div class="mono text-[10px] opacity-50 mt-3 italic">点击后将生成《祥林嫂时期总结报告》</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="max-w-3xl mx-auto px-5 py-10 text-center mono text-[10px] opacity-40 tracking-widest">
+    <div class="vintage-footer pt-3">PEN.WHINING-ERA &nbsp;//&nbsp; 记 录 你 悬 在 半 空 的 日 子 &nbsp;//&nbsp; v0.3</div>
+  </footer>
+</div>
+
+<div id="reportModal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-5">
+  <div class="paper-bg relative p-8 max-w-md w-full max-h-[90vh] overflow-y-auto" style="border: 1px solid var(--ink); box-shadow: 8px 8px 0 var(--ink);">
+    <div class="text-center">
+      <div class="text-5xl mb-2">🌅</div>
+      <div class="brush text-3xl">完 结 撒 花</div>
+      <div class="mono text-[11px] opacity-60 mt-1">FINAL REPORT</div>
+    </div>
+    <div id="finalReport" class="mt-6 space-y-4 text-sm leading-loose"></div>
+    <button onclick="document.getElementById('reportModal').classList.add('hidden')" class="ink-btn rounded w-full py-2.5 text-sm mt-6">归 档 此 段 时 期</button>
+  </div>
+</div>
+
+<div id="historyDetailModal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-5">
+  <div class="paper-bg relative p-8 max-w-md w-full max-h-[90vh] overflow-y-auto" style="border: 1px solid var(--ink); box-shadow: 8px 8px 0 var(--ink);">
+    <div class="absolute top-5 right-5 seal px-3 py-1 text-[11px] mono">DIAGNOSIS</div>
+    <p class="mono text-[11px] opacity-60 tracking-widest mb-2">姓 名：阁下 · 性别：彷徨</p>
+    <p class="mono text-[11px] opacity-60 tracking-widest mb-6">就 诊 日 期：<span id="histDate"></span></p>
+    <div class="text-center my-8">
+      <div id="histEmoji" class="text-7xl mb-4 inline-block stamp-in"></div>
+      <div class="brush text-3xl md:text-4xl" id="histRank"></div>
+      <div class="text-sm opacity-70 mt-3 italic" id="histScene"></div>
+      <div class="mt-8 inline-block scribble-circle px-12 py-4">
+        <div class="mono text-[11px] opacity-60">指 数</div>
+        <div class="brush text-6xl text-[var(--vermilion)]" id="histScore"></div>
+        <div class="mono text-[11px] opacity-60">/ 100</div>
+      </div>
+    </div>
+    <div class="mt-6 pt-6 border-t border-[var(--ink)]/30">
+      <p class="brush text-lg text-[var(--vermilion)] mb-2">⊙ 医嘱：</p>
+      <p id="histAdvice" class="text-base leading-loose"></p>
+    </div>
+    <div class="mt-8 flex items-center justify-between">
+      <span class="lishu tracking-widest text-xs opacity-60">—— 此致 即颂 内推 ——</span>
+      <span class="seal-square px-3 py-2 brush text-base">已诊</span>
+    </div>
+    <button onclick="document.getElementById('historyDetailModal').classList.add('hidden')" class="ink-btn rounded w-full py-2.5 text-sm mt-6">关 闭</button>
+  </div>
+</div>
+
+<script>
+const STORE_KEY = 'whining-era-v3-demo';
+const CAPSULE_KEY = 'whining-capsules-v3-demo';
+const SPLASH_SEEN_KEY = 'whining-splash-seen-demo';
+const QUIZ_HISTORY_KEY = 'whining-quiz-history-demo';
+
+const store = {
+  load() { try { return JSON.parse(localStorage.getItem(STORE_KEY)) || { records: [], firstDay: Date.now() }; } catch { return { records: [], firstDay: Date.now() }; }},
+  save(d) { localStorage.setItem(STORE_KEY, JSON.stringify(d)); },
+  loadCapsules() { try { return JSON.parse(localStorage.getItem(CAPSULE_KEY)) || []; } catch { return []; }},
+  saveCapsules(d) { localStorage.setItem(CAPSULE_KEY, JSON.stringify(d)); },
+};
+let state = store.load();
+if (!state.firstDay) { state.firstDay = Date.now(); store.save(state); }
+
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+const fmtDate = ts => {
+  const d = new Date(ts), now = new Date(), diff = (now - d) / 1000;
+  if (diff < 60) return '刚刚';
+  if (diff < 3600) return `${Math.floor(diff/60)} 分钟前`;
+  if (diff < 86400) return `${Math.floor(diff/3600)} 小时前`;
+  return `${Math.floor(diff/86400)} 天前`;
+};
+const daysSince = ts => Math.max(1, Math.floor((Date.now() - ts) / 86400000) + 1);
+const escapeHtml = s => s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+$('#splashDate').textContent = '公历 ' + new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+$('#todayDate') && ($('#todayDate').textContent = new Date().toLocaleDateString('zh-CN'));
+
+function showOnly(id) {
+  ['splash','quiz','quizResult','mainApp'].forEach(x => $('#'+x).classList.toggle('hidden', x !== id));
+  window.scrollTo(0,0);
+}
+
+$('#startQuizBtn').addEventListener('click', () => { initQuiz(); showOnly('quiz'); });
+$('#skipQuizBtn').addEventListener('click', () => { localStorage.setItem(SPLASH_SEEN_KEY, '1'); enterApp(); });
+$('#enterAppBtn').addEventListener('click', () => { localStorage.setItem(SPLASH_SEEN_KEY, '1'); enterApp(); });
+$('#retakeQuizBtn').addEventListener('click', () => { initQuiz(); showOnly('quiz'); });
+$('#quizSkipAllBtn').addEventListener('click', () => { localStorage.setItem(SPLASH_SEEN_KEY, '1'); enterApp(); });
+$('#backToSplashBtn').addEventListener('click', () => { localStorage.removeItem(SPLASH_SEEN_KEY); showOnly('splash'); window.scrollTo(0,0); });
+
+$('#shareResultBtn').addEventListener('click', async () => {
+  const node = $('#resultCard');
+  $('#shareResultBtn').textContent = '生成中…';
+  try {
+    const dataUrl = await htmlToImage.toPng(node, { pixelRatio: 2, backgroundColor: '#ebe1c8' });
+    const a = document.createElement('a');
+    a.download = `祥林嫂诊断书_${new Date().toISOString().slice(0,10)}.png`;
+    a.href = dataUrl; a.click();
+  } catch(e) { alert('截图失败：' + e.message); }
+  $('#shareResultBtn').innerHTML = '📸 截图分享报告';
+});
+
+function enterApp() { showOnly('mainApp'); renderFeed(); }
+if (localStorage.getItem(SPLASH_SEEN_KEY) === '1') enterApp();
+
+const QUIZ_POOL = [
+  { q: '清晨七点半，闹钟响过第三遍。睁眼之后，你心里头一句最像哪句？', options: [{ t: '"今日宜起，宜投，宜被回。"——所谓宜，无非是图个心安罢了。', s: 6 }, { t: '"再眯五分钟，五分钟而已。"（睁眼已是九点四十）', s: 13 }, { t: '"昨夜那封邮件，他到底回了没——"（手机昨夜已在脸上摔过两次）', s: 19 }, { t: '"我大约的确又活过来了。"', s: 24 }] },
+  { q: '亲戚饭桌上一句"近来在忙些什么呀"，你嘴上的版本与心里的版本，差着几个鲁镇？', options: [{ t: '嘴上："在准备一些事。" 心里："在准备一些事。" ——尚算一致。', s: 6 }, { t: '嘴上："还行。" 心里："一言难尽，此处不便难尽。"', s: 13 }, { t: '嘴上："挺好的。" 心里："再问下去，我便要哭了。"', s: 19 }, { t: '嘴上："挺好。" 心里："我向来是不惮以最坏的恶意，揣测三姑六婆的。"', s: 24 }] },
+  { q: '此刻打开你那份"自传"——简历——最新一页文件名，是怎样一副光景？', options: [{ t: '简历.pdf。一战到底，听天由命，便是。', s: 6 }, { t: '简历_互联网版.pdf 与 简历_国企版.pdf 并陈一列。井井有条，似有所图。', s: 12 }, { t: '简历_最终版_v8_这次真的final.pdf——所谓"最终"，并不最终。', s: 19 }, { t: '简历_v17.pdf。其实自传上本没有路，改的人多了，也便成了路。', s: 24 }] },
+  { q: '本周，那一段"标志性的苦楚"（终面挂、被裁、分手、offer 鸽……）你已讲过几遍？', options: [{ t: '0–1 遍。朋友们大约是没在意的。', s: 5 }, { t: '2–3 遍。那几位主要的听众，俱已听过了。', s: 12 }, { t: '4–6 遍。讲到第四遍，自己倒先停了一停——看了对方一眼，又接着讲下去。', s: 18 }, { t: '7+ 遍。我真傻，真的——我单知道朋友会听一遍两遍，不知道讲到第七遍，连便利店店员也都背下来了。', s: 24 }] },
+  { q: '深夜十一点，邮箱"叮"地一响，标题写着"很遗憾"。你的下一个动作是？', options: [{ t: '"哦。" 截图存档，归入"故纸堆"一夹，留作他日凭据。', s: 6 }, { t: '点一根烟（或拆一袋零食），假作此事素未发生。', s: 12 }, { t: '不及三秒，已点开下一岗——"它并未拒我，是我未曾投它。" 如此聊以自欺，便是。', s: 18 }, { t: '盯着那封信看了十分钟。读书人的事，能算被拒么？', s: 24 }] },
+  { q: '走在街上，什么东西最容易把你"那件事"重新勾出来？', options: [{ t: '只有相关公司的新闻——也就一晃，过去了。', s: 6 }, { t: '某一首歌，某一条街，某一种天气。 ——大约是有些缘分的罢。', s: 13 }, { t: '别人随口的一句无关的话。我竟能自动接上下半句——像戏台上对过的词。', s: 19 }, { t: '我翻开朋友圈一查，这朋友圈没有岁月，仔细看了半夜，才从字缝里看出字来，满屏都写着两个字是"内推"。', s: 24 }] },
+  { q: '朋友隔着屏幕递过来一句"加油，会好的"。两秒之内，你心里冒出的真实念头最像哪句？', options: [{ t: '"承蒙厚意，铭感五内。"——并且是真的。', s: 6 }, { t: '"嗯嗯，谢谢——"（指尖此刻已划至下一条对话）', s: 12 }, { t: '"这话本月听过四十七次了。第四十八次，便是阁下。"', s: 18 }, { t: '"——会好的，会好的。" 真的猛士，敢于直面惨淡的安慰。', s: 24 }] },
+  { q: '你近来发觉，那位过去最常听你倾诉的朋友，回信肉眼可见地慢了。你心里的解释是？', options: [{ t: '"他大约也忙。"——于是当真不再打扰，给彼此都留点体面。', s: 7 }, { t: '"算了，下次再说罢。"——把那一段话，又咽回了肚子里。', s: 14 }, { t: '"是不是我说得太多了？" 于是倒回去翻三天前的聊天记录——翻了一夜，并无所获。', s: 19 }, { t: '其实倾诉对象上本没有路，讲的人多了，他便不回了。', s: 24 }] },
+  { q: '你最近一次"嫌弃自己"，是在什么时候？', options: [{ t: '没什么特别的。大约——是该减肥了。', s: 5 }, { t: '又拖延了一件原本今天就能办的小事。明日复明日，明日大约还有。', s: 13 }, { t: '又把那段话讲了一遍。讲到一半，方才看见对方的眼神，已不在我身上了。', s: 19 }, { t: '我已躬行我先前所憎恶、所反对的一切：油腻、敷衍、自怨自艾。然而日子，倒也过得下去。', s: 24 }] },
+  { q: '凌晨三点。屋是黑的，屏是亮的。此刻你大概率正在做的事是？', options: [{ t: '一集老剧已看完，正听着片尾曲——"再听一遍，便睡。" ——倒也当真睡了。', s: 6 }, { t: '把简历改至第十八版。改完，竟也说不出哪里不好；然而也说不出哪里更好。', s: 16 }, { t: '在脉脉、小红书反复搜"XX 公司面经"。已划到去年八月，犹未肯停。', s: 19 }, { t: '盯着天花板，回放今日面试官那一句"我们再聊聊"。前面？前面，是坟。', s: 23 }] },
+  { q: '本周地铁上，你又一次打开 Boss 直聘。那一刻最像哪句？', options: [{ t: '"满本写着两个字：机 会。"', s: 5 }, { t: '"满本写着两个字：内 卷。"', s: 13 }, { t: '"满本都是字，仔细看了半夜，方才看出字缝里写着——已 读 不 回。"', s: 19 }, { t: '"我打开它，是为再卸载它一次。"——破软件遮颜过闹市，漏简历载梦泛中流。', s: 22 }] },
+  { q: '你近来一次"为令自己心安"所做的事——也即所谓"门槛"——是哪一桩？', options: [{ t: '收拾了房间。做了一顿饭。——次序不可颠倒，倒则再坍塌。', s: 6 }, { t: '凌晨下单了一本书 / 报了一门课 / 办了一张健身卡。至今未翻 / 未听 / 未去。', s: 13 }, { t: '"上岸大礼包"全套尽数请回家中：转运手串、考公真题、塔罗一副。次日醒来，独坐良久，并不言语。', s: 19 }, { t: '一日之内，去了寺庙、求了签、改了网名、换了头像、删光朋友圈。门槛是捐了的，然而似乎并没有变。', s: 24 }] },
+  { q: '周日下午四点，父母视频电话："工作定了没？" 你的回答最像哪种？', options: [{ t: '"已有眉目，勿念。"——所谓眉目，并无凭据，且未必真有，罢了。', s: 11 }, { t: '"在走流程，下周有消息。"——这话已连续说了八周。下周还说。', s: 17 }, { t: '"嗯。"——令一段对话，死于一个字。', s: 19 }, { t: '"妈，我们先前——比楼下小张阔得多啦。"——挂掉之后，独坐良久，并无别的可聊。', s: 22 }] },
+  { q: '关灯之后，最近一次你认真问过自己的问题是？', options: [{ t: '"今晚吃什么？" ——这一问，已困我半生。', s: 5 }, { t: '"是不是当初方向便选错了？"——一问之下，竟睡意全无。', s: 14 }, { t: '"读了这许多年的书，到底是为了什么？" ——想了一想，并无答案；便睡了。', s: 20 }, { t: '"一个 offer 死了之后，究竟有没有魂灵的？"', s: 24 }] },
+  { q: '若"个人简介"那一栏不审稿、不投递，让你写一句给自己看的真话，你会写？', options: [{ t: '"目标明确，正在路上。"', s: 6 }, { t: '"在过渡期。机会请砸我。"', s: 13 }, { t: '"暂 无 可 奉 告。"', s: 19 }, { t: '"我真傻，真的——我单知道考研失败要再战，不知道秋招也会再战。"', s: 24 }] },
+];
+
+function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+
+const RANKS = [
+  { min: 0, emoji: '🛡️', name: '祥林嫂绝缘体', scene: '序章 · 鲁镇雪落', desc: '雷达未捕获，or 还没毕业' },
+  { min: 20, emoji: '🌱', name: '祥林嫂预备役', scene: '第一幕 · 初到鲁镇', desc: '有苗头，但还在硬撑体面' },
+  { min: 40, emoji: '🤐', name: '祥林嫂欲言又止', scene: '第二幕 · 初讲阿毛', desc: '沉默出现裂缝，话到嘴边又咽回去' },
+  { min: 60, emoji: '💬', name: '祥林嫂碎碎念', scene: '第三幕 · 反复讲阿毛', desc: '低功耗运行，只在小范围发作' },
+  { min: 70, emoji: '🔁', name: '祥林嫂单曲循环', scene: '第三幕 · 单曲循环', desc: '同一话题反复讲，每次还打新补丁' },
+  { min: 80, emoji: '📢', name: '祥林嫂广播中', scene: '第四幕 · 捐门槛被拒', desc: '怨气开始公共播放，私聊装不下了' },
+  { min: 90, emoji: '👑', name: '祥林嫂本嫂', scene: '第五幕 · 临终问魂灵', desc: '名词已不够，你本身是形容词' },
+];
+
+const QUIZ_ADVICE = {
+  '祥林嫂绝缘体': '鲁镇的酒馆里，你坐在角落，听着别人讲自己的阿毛。你摸了摸口袋，那里没有故事可讲——或者你有，但你决定先喝完这杯酒。窗外下着雪，你觉得那雪与你无关。',
+  '祥林嫂预备役': '深夜三点，你在搜索框里打下"人生意义"，又删掉了。你知道有些话一旦说出口就收不回，就像鲁镇的雪，落在地上就脏了。你翻了个身，决定明天再说——虽然明天你也不会说。',
+  '祥林嫂欲言又止': '你已经把那句抱怨在嘴里嚼了三遍，咽下去两遍。第三次，你终于开了口，却在看见对方眼神的瞬间，把后半句换成了"算了，没事"。你知道那个"没事"有多重——重到鲁镇的雪都能压弯一根树枝。',
+  '祥林嫂碎碎念': '你开始在小范围释放信号了。闺蜜群里，你发了三条59秒的语音；深夜朋友圈里，你分享了一首没有人听的歌。你告诉自己"只是随便说说"，但你知道，随便说说的话通常最不好随便听听。',
+  '祥林嫂单曲循环': '同一个故事，你已经讲了五遍，每次还新增细节。第一遍是概述，第三遍有了心理描写，第五遍连当时的风向都补上了。你的朋友们开始轮换，但你还没发现——因为你正讲到最精彩的部分。',
+  '祥林嫂广播中': '你的倾诉已经溢出了私聊的边界。朋友圈、公开群、甚至评论区，都留下了你怨气的痕迹。你像鲁镇的一个移动广播站，走到哪播到哪。有人静音了你，但你不知道——信号太强，你已经听不进反馈了。',
+  '祥林嫂本嫂': '你已经成为了一个形容词。当朋友们形容一个人"太祥林嫂了"的时候，他们可能就是在说你——虽然你不在场。你不再需要搜索"人生意义"，因为你本身就是问题的一部分。鲁镇的雪为你而下，而你，已经懒得伸手去接了。',
+};
+
+let quizQuestions = [];
+let quizState = { idx: 0, answers: [] };
+
+function initQuiz() {
+  quizQuestions = shuffle(QUIZ_POOL);
+  quizState = { idx: 0, answers: [] };
+  renderQuiz();
+}
+
+function renderQuiz() {
+  const i = quizState.idx;
+  const q = quizQuestions[i];
+  $('#quizNum').textContent = ['一','二','三','四','五','六','七','八','九','十','十一','十二','十三','十四','十五'][i];
+  $('#quizProgress').style.width = ((i+1) / quizQuestions.length * 100) + '%';
+  $('#quizBackBtn').style.visibility = i === 0 ? 'hidden' : 'visible';
+  $('#quizBox').innerHTML = `
+    <div class="brush text-2xl md:text-3xl mb-8 leading-relaxed">
+      <span class="text-[var(--vermilion)] mr-2">问：</span>${q.q}
+    </div>
+    <div class="space-y-3">
+      ${q.options.map((opt, j) => `
+        <button class="quiz-option w-full text-left px-5 py-4 text-base leading-relaxed ${quizState.answers[i] === j ? 'selected' : ''}" data-opt="${j}">
+          <span class="mono text-xs opacity-60 mr-2">${['A','B','C','D'][j]}.</span>${opt.t}
+        </button>
+      `).join('')}
+    </div>
+  `;
+  $$('#quizBox .quiz-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const j = +btn.dataset.opt;
+      quizState.answers[i] = j;
+      $$('#quizBox .quiz-option').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      setTimeout(() => {
+        if (i < quizQuestions.length - 1) { quizState.idx++; renderQuiz(); }
+        else { showQuizResult(); }
+      }, 350);
+    });
+  });
+}
+
+$('#quizBackBtn').addEventListener('click', () => { if (quizState.idx > 0) { quizState.idx--; renderQuiz(); } });
+
+function showQuizResult() {
+  let total = 0;
+  quizState.answers.forEach((j, i) => { total += quizQuestions[i].options[j].s; });
+  const normalized = Math.min(100, Math.round((total / 360) * 100));
+  const rank = [...RANKS].reverse().find(r => normalized >= r.min) || RANKS[0];
+  const advice = QUIZ_ADVICE[rank.name] || '建议立即进入档案馆，开始记录。';
+
+  const history = JSON.parse(localStorage.getItem(QUIZ_HISTORY_KEY) || '[]');
+  history.unshift({ score: normalized, rankName: rank.name, rankEmoji: rank.emoji, rankDesc: rank.desc, scene: rank.scene, advice, date: Date.now() });
+  localStorage.setItem(QUIZ_HISTORY_KEY, JSON.stringify(history.slice(0, 20)));
+
+  $('#resultScore').textContent = normalized;
+  $('#resultEmoji').textContent = rank.emoji;
+  $('#resultRank').textContent = rank.name;
+  $('#resultDesc').textContent = rank.desc;
+  $('#resultAdvice').textContent = advice;
+  $('#resultDate').textContent = new Date().toLocaleDateString('zh-CN');
+  $('#resultDateLabel').textContent = new Date().toLocaleDateString('zh-CN');
+  showOnly('quizResult');
+}
+
+let activeTagsPos = new Set();
+let activeTagsNeg = new Set();
+
+function bindTagButtons(selector, storeSet) {
+  $$(selector).forEach(btn => {
+    btn.addEventListener('click', () => {
+      const t = btn.dataset.tag;
+      if (storeSet.has(t)) { storeSet.delete(t); btn.classList.remove('active'); }
+      else { storeSet.add(t); btn.classList.add('active'); }
+    });
+  });
+}
+bindTagButtons('.tag-btn-pos', activeTagsPos);
+bindTagButtons('.tag-btn-neg', activeTagsNeg);
+
+function submitRecord(textareaId, tagSet, listenerId, tagSelector) {
+  const text = $(textareaId).value.trim();
+  if (!text) { $(textareaId).focus(); return; }
+  state.records.unshift({ id: Date.now(), text, tags: [...tagSet], listener: $(listenerId).value.trim() || null, createdAt: Date.now() });
+  store.save(state);
+  $(textareaId).value = ''; $(listenerId).value = '';
+  tagSet.clear(); $$(tagSelector).forEach(b => b.classList.remove('active'));
+  renderFeed();
+  playSigh();
+}
+
+$('#submitPosBtn').addEventListener('click', () => submitRecord('#newRecordPos', activeTagsPos, '#listenerInputPos', '.tag-btn-pos'));
+$('#submitNegBtn').addEventListener('click', () => submitRecord('#newRecordNeg', activeTagsNeg, '#listenerInputNeg', '.tag-btn-neg'));
+
+function playSigh() {
+  const flash = document.createElement('div');
+  const sighs = ['* 叹 气 *', '* 长 太 息 *', '* 唉 *', '* 又 一 卷 *', '* 已 入 档 *', '* 录 矣 *'];
+  flash.textContent = sighs[Math.floor(Math.random() * sighs.length)];
+  flash.className = 'fixed top-24 left-1/2 -translate-x-1/2 italic pointer-events-none brush text-lg z-50';
+  flash.style.color = 'var(--tea)';
+  flash.style.animation = 'sighFloat 1.2s ease-out forwards';
+  document.body.appendChild(flash);
+  setTimeout(() => flash.remove(), 1200);
+}
+const styleEl = document.createElement('style');
+styleEl.textContent = `@keyframes sighFloat { 0%{opacity:0;transform:translate(-50%,0)} 30%{opacity:.8} 100%{opacity:0;transform:translate(-50%,-30px)} }`;
+document.head.appendChild(styleEl);
+
+function renderFeed() {
+  $('#dayCount').textContent = daysSince(state.firstDay);
+  $('#recordCount').textContent = `共 ${state.records.length} 卷`;
+  const list = $('#recordList'), empty = $('#emptyState');
+  list.innerHTML = '';
+  if (state.records.length === 0) { empty.classList.remove('hidden'); return; }
+  empty.classList.add('hidden');
+  const POS_TAGS = ['小确幸', '有进展', '拿到offer', '被夸了'];
+  const NEG_TAGS = ['emo', '被拒', 'HR鬼魂', '想躺平'];
+  state.records.forEach((r, idx) => {
+    const el = document.createElement('div');
+    el.className = 'paper-bg relative p-5 grid-lines';
+    const hasPos = r.tags.some(t => POS_TAGS.includes(t));
+    const hasNeg = r.tags.some(t => NEG_TAGS.includes(t));
+    let leftBorder = 'transparent';
+    if (hasPos && !hasNeg) leftBorder = 'var(--tea)';
+    else if (hasNeg && !hasPos) leftBorder = 'var(--vermilion)';
+    el.style.cssText = `border: 1px solid var(--ink); border-left: 4px solid ${leftBorder};`;
+    el.innerHTML = `
+      <div class="absolute top-2 right-3 mono text-[10px] opacity-50">第 ${state.records.length - idx} 卷</div>
+      <div class="flex justify-between items-start gap-3">
+        <p class="text-base leading-loose flex-1 pr-3">${escapeHtml(r.text)}</p>
+        <button class="opacity-30 hover:opacity-100 hover:text-[var(--vermilion)] text-xs flex-shrink-0" data-del="${r.id}">✕</button>
+      </div>
+      <div class="mt-3 pt-2 border-t border-dashed border-[var(--ink)]/20 flex flex-wrap items-center gap-2 text-xs opacity-70">
+        <span class="mono">${fmtDate(r.createdAt)}</span>
+        ${r.tags.map(t => `<span class="tag rounded-full px-2 py-0.5">#${t}</span>`).join('')}
+        ${r.listener ? `<span class="ml-auto">→ 说与 <b class="text-[var(--vermilion)]">${escapeHtml(r.listener)}</b> 听</span>` : ''}
+      </div>
+    `;
+    list.appendChild(el);
+  });
+  list.querySelectorAll('[data-del]').forEach(b => {
+    b.addEventListener('click', () => { state.records = state.records.filter(r => r.id != b.dataset.del); store.save(state); renderFeed(); });
+  });
+}
+
+const FORTUNES = [
+  '上签：HR 今日会回信（但多半是拒函）', '中签：宜摆烂，忌打开 BOSS', '下签：你简历那个项目，今天面试官必问',
+  '上签：今日能投三份，明日能收零回', '中签：宜在朋圈点赞他人 offer，忌内耗', '下下签：今日又有人问"可寻得差事？"',
+  '上签：你以为没希望那家，其实在走流程', '中签：宜饮奶茶，忌看脉脉', '下签：你想躺平，奈何房租不许',
+  '上签：今日崩溃只持续三时辰', '中签：宜对父母言"一切顺遂"，忌细说', '下下签：群面将遇你最怕之那种人',
+  '神签：今日心安理得睡至日上三竿', '空签：诸事不发生，此事即糟', '上签：导师今日不会突然召见',
+];
+$('#drawBtn').addEventListener('click', () => {
+  const f = FORTUNES[Math.floor(Math.random() * FORTUNES.length)];
+  const box = $('#fortuneText');
+  box.style.opacity = '0';
+  setTimeout(() => { box.textContent = `「 ${f} 」`; box.style.opacity = '1'; }, 200);
+});
+
+const LUXUN = [
+  '"她大约的确是死了。"', '"我向来是不惮以最坏的恶意来揣测 HR 的。"', '"希望本是无所谓有，无所谓无的。"',
+  '"我家门前有两棵树，一棵是没回我的，另一棵也是没回我的。"', '"猛兽总是独行，牛羊才成群结队。但我也想成群。"',
+  '"愿中国青年都摆脱冷气，只是向上走，不必听已读不回的话。"', '"沉默呵，沉默呵！不在沉默中投递，就在沉默中失业。"',
+];
+const KEYWORDS = ['真的','为什么','凭什么','完了','我就','明明','怎么','到底','又','还','已读','不回','拒','挂','面试','秋招','实习','offer','HR','简历','投','岗位','内推','笔试','OC','OD','摆烂','emo','焦虑','崩溃','废物','失败'];
+
+function computeIndex() {
+  const recs = state.records;
+  if (recs.length === 0) return { total: 0, rank: RANKS[0], dims:{repeat:0,duration:0,spread:0,intensity:0}, topPhrase:null, topPhraseCount:0, luxun: LUXUN[0], day: daysSince(state.firstDay), topListener: null };
+
+  const sigs = recs.map(r => { const s = new Set(); KEYWORDS.forEach(k => { if (r.text.includes(k)) s.add(k); }); return s; });
+  let maxCluster = 1;
+  for (let i = 0; i < sigs.length; i++) {
+    let c = 1;
+    for (let j = 0; j < sigs.length; j++) {
+      if (i === j) continue;
+      if ([...sigs[i]].filter(k => sigs[j].has(k)).length >= 2) c++;
+    }
+    if (c > maxCluster) maxCluster = c;
+  }
+  const repeat = Math.min(100, Math.round((maxCluster / recs.length) * 100));
+  const days = daysSince(state.firstDay);
+  const activeDays = new Set(recs.map(r => new Date(r.createdAt).toDateString())).size;
+  const duration = Math.min(100, Math.round(days * 1.5 + activeDays * 3));
+  const listeners = recs.map(r => r.listener).filter(Boolean);
+  const counts = {};
+  listeners.forEach(l => counts[l] = (counts[l] || 0) + 1);
+  const maxRepeat = Math.max(0, ...Object.values(counts));
+  const spread = Math.min(100, new Set(listeners).size * 18 + maxRepeat * 4);
+  let hits = 0;
+  recs.forEach(r => KEYWORDS.forEach(k => { if (r.text.includes(k)) hits++; }));
+  const intensity = Math.min(100, Math.round((hits / Math.max(1, recs.length)) * 22 + Math.min(20, recs.length)));
+  const total = Math.round(repeat * .4 + duration * .25 + spread * .2 + intensity * .15);
+  const rank = [...RANKS].reverse().find(r => total >= r.min);
+
+  const wc = {};
+  KEYWORDS.forEach(k => { let c = 0; recs.forEach(r => { if (r.text.includes(k)) c++; }); if (c) wc[k] = c; });
+  const sorted = Object.entries(wc).sort((a,b)=>b[1]-a[1]);
+  const topPhrase = sorted[0] ? sorted[0][0] : null;
+  const topPhraseCount = sorted[0] ? sorted[0][1] : 0;
+  const topListener = Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];
+
+  return { total, rank, dims:{repeat,duration,spread,intensity}, topPhrase, topPhraseCount, luxun: LUXUN[Math.floor(Math.random()*LUXUN.length)], day: days, topListener };
+}
+
+function renderIndex() {
+  const r = computeIndex();
+  $('#totalScore').textContent = r.total;
+  $('#scoreBar').style.width = r.total + '%';
+  $('#rankEmoji').textContent = r.rank.emoji;
+  $('#rankName').textContent = r.rank.name;
+  $('#rankDesc').textContent = r.rank.desc;
+  $('#reportDay').textContent = r.day;
+  $('#reportDate').textContent = new Date().toLocaleDateString('zh-CN');
+  $('#luxunQuote').textContent = r.luxun;
+  document.querySelectorAll('.dim-row').forEach(row => {
+    const k = row.dataset.key, v = r.dims[k];
+    row.querySelector('.dim-val').textContent = v + '%';
+    row.querySelector('.dim-bar').style.width = v + '%';
+  });
+  if (r.topPhrase) {
+    $('#topPhrase').textContent = `"……${r.topPhrase}……"`;
+    let meta = `这个词在你的档案里出现了 ${r.topPhraseCount} 次`;
+    if (r.topListener) meta += ` · ${r.topListener[0]} 已经听你说过 ${r.topListener[1]} 次`;
+    $('#topPhraseMeta').textContent = meta;
+  } else {
+    $('#topPhrase').textContent = '"暂无数据，先去念叨几句吧"';
+    $('#topPhraseMeta').textContent = '';
+  }
+}
+
+function renderQuizHistory() {
+  const history = JSON.parse(localStorage.getItem(QUIZ_HISTORY_KEY) || '[]');
+  $('#quizHistoryCount').textContent = `共 ${history.length} 次`;
+  const list = $('#quizHistoryList');
+  const empty = $('#quizHistoryEmpty');
+  list.innerHTML = '';
+  if (history.length === 0) { empty.classList.remove('hidden'); return; }
+  empty.classList.add('hidden');
+  history.forEach(h => {
+    const el = document.createElement('div');
+    el.className = 'flex items-center justify-between py-2 border-b border-dashed border-[var(--ink)]/20 cursor-pointer hover:bg-[var(--ink)]/5 transition-colors px-1 rounded';
+    el.innerHTML = `
+      <div class="flex items-center gap-3">
+        <span class="text-xl">${h.rankEmoji}</span>
+        <div>
+          <div class="brush text-base">${h.rankName}</div>
+          <div class="mono text-[10px] opacity-60">${new Date(h.date).toLocaleDateString('zh-CN')}</div>
+        </div>
+      </div>
+      <div class="brush text-xl text-[var(--vermilion)]">${h.score}</div>
+    `;
+    el.addEventListener('click', () => {
+      $('#histEmoji').textContent = h.rankEmoji;
+      $('#histRank').textContent = h.rankName;
+      $('#histScene').textContent = h.scene || '';
+      $('#histScore').textContent = h.score;
+      $('#histAdvice').textContent = h.advice || '';
+      $('#histDate').textContent = new Date(h.date).toLocaleDateString('zh-CN');
+      document.getElementById('historyDetailModal').classList.remove('hidden');
+    });
+    list.appendChild(el);
+  });
+}
+
+$('#refreshBtn').addEventListener('click', renderIndex);
+$('#shareBtn').addEventListener('click', async () => {
+  const node = $('#indexCard');
+  $('#shareBtn').textContent = '生成中…';
+  try {
+    const dataUrl = await htmlToImage.toPng(node, { pixelRatio: 2, backgroundColor: '#ebe1c8' });
+    const a = document.createElement('a');
+    a.download = `祥林嫂指数_${new Date().toISOString().slice(0,10)}.png`;
+    a.href = dataUrl; a.click();
+  } catch(e) { alert('截图失败：' + e.message); }
+  $('#shareBtn').innerHTML = '📸 截图分享';
+});
+
+$('#sealBtn').addEventListener('click', () => {
+  const text = $('#capsuleText').value.trim();
+  if (!text) return;
+  const caps = store.loadCapsules();
+  caps.unshift({ id: Date.now(), text, sealedAt: Date.now() });
+  store.saveCapsules(caps);
+  $('#capsuleText').value = '';
+  renderCapsules();
+});
+
+function renderCapsules() {
+  const caps = store.loadCapsules();
+  const list = $('#capsuleList');
+  if (caps.length === 0) {
+    list.innerHTML = `<div class="paper-bg relative p-6 text-center text-sm opacity-60" style="border: 1px dashed var(--ink);">尚 无 封 存。</div>`;
+    return;
+  }
+  list.innerHTML = caps.map(c => `
+    <div class="paper-bg relative p-4 grid-lines" style="border: 1px solid var(--ink);">
+      <div class="flex items-center justify-between mb-2">
+        <span class="mono text-[11px] opacity-60">🔒 封存于 ${new Date(c.sealedAt).toLocaleDateString('zh-CN')}</span>
+        <span class="mono text-[11px] opacity-60">已 ${daysSince(c.sealedAt)} 日</span>
+      </div>
+      <details>
+        <summary class="text-sm italic opacity-70 hover:opacity-100 brush">[ 拆 封 ]</summary>
+        <p class="mt-3 text-base leading-loose">${escapeHtml(c.text)}</p>
+      </details>
+    </div>
+  `).join('');
+}
+
+$('#upshoreBtn').addEventListener('click', () => {
+  const r = computeIndex();
+  const days = daysSince(state.firstDay);
+  const recs = state.records;
+  const stat = {};
+  recs.forEach(rec => { if (rec.listener) stat[rec.listener] = (stat[rec.listener]||0)+1; });
+  const top = Object.entries(stat).sort((a,b)=>b[1]-a[1])[0];
+  $('#finalReport').innerHTML = `
+    <p>阁下在祥林嫂时期度过了 <b class="text-[var(--vermilion)] brush text-lg">${days}</b> 日。</p>
+    <p>期间写下 <b>${recs.length}</b> 卷碎碎念，平均每日 <b>${(recs.length/days).toFixed(1)}</b> 卷。</p>
+    ${top ? `<p>最常说与 <b class="text-[var(--vermilion)]">${escapeHtml(top[0])}</b> 听，承蒙厚耳 <b>${top[1]}</b> 次。该请其饮茶。</p>` : ''}
+    <p>最高指数 <b>${r.total}</b>，段位停于 <b class="brush">${r.rank.name}</b>。</p>
+    <p class="mt-4 italic opacity-70 brush text-base">"现在你不必再说了。"——此段时期，正式归档。</p>
+  `;
+  $('#reportModal').classList.remove('hidden');
+});
+
+$$('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    $$('.tab-btn').forEach(b => b.classList.remove('tab-active'));
+    btn.classList.add('tab-active');
+    const t = btn.dataset.tab;
+    ['feed','index','capsule'].forEach(n => $(`#tab-${n}`).classList.toggle('hidden', n !== t));
+    if (t === 'index') { renderIndex(); renderQuizHistory(); }
+    if (t === 'capsule') renderCapsules();
+  });
+});
+</script>
+</body>
+</html>
