@@ -635,14 +635,30 @@ function showOnly(id) {
   window.scrollTo(0,0);
 }
 
-$('#startQuizBtn').addEventListener('click', () => { initQuiz(); showOnly('quiz'); });
-$('#skipQuizBtn').addEventListener('click', () => { localStorage.setItem(SPLASH_SEEN_KEY, '1'); enterApp(); });
-$('#enterAppBtn').addEventListener('click', () => { localStorage.setItem(SPLASH_SEEN_KEY, '1'); enterApp(); });
-$('#retakeQuizBtn').addEventListener('click', () => { initQuiz(); showOnly('quiz'); });
-$('#quizSkipAllBtn').addEventListener('click', () => { localStorage.setItem(SPLASH_SEEN_KEY, '1'); enterApp(); });
+$('#startQuizBtn').addEventListener('click', () => {
+  fetch('/api/track', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({event: 'quiz_start'}) }).catch(() => {});
+  initQuiz(); showOnly('quiz');
+});
+$('#skipQuizBtn').addEventListener('click', () => {
+  fetch('/api/track', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({event: 'skip_quiz'}) }).catch(() => {});
+  localStorage.setItem(SPLASH_SEEN_KEY, '1'); enterApp();
+});
+$('#enterAppBtn').addEventListener('click', () => {
+  fetch('/api/track', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({event: 'enter_app'}) }).catch(() => {});
+  localStorage.setItem(SPLASH_SEEN_KEY, '1'); enterApp();
+});
+$('#retakeQuizBtn').addEventListener('click', () => {
+  fetch('/api/track', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({event: 'quiz_retake'}) }).catch(() => {});
+  initQuiz(); showOnly('quiz');
+});
+$('#quizSkipAllBtn').addEventListener('click', () => {
+  fetch('/api/track', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({event: 'quiz_skip'}) }).catch(() => {});
+  localStorage.setItem(SPLASH_SEEN_KEY, '1'); enterApp();
+});
 $('#backToSplashBtn').addEventListener('click', () => { localStorage.removeItem(SPLASH_SEEN_KEY); showOnly('splash'); window.scrollTo(0,0); });
 
 $('#shareResultBtn').addEventListener('click', async () => {
+  fetch('/api/track', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({event: 'share_result'}) }).catch(() => {});
   const node = $('#resultCard');
   $('#shareResultBtn').textContent = '生成中…';
   try {
@@ -728,6 +744,11 @@ function renderQuiz() {
     btn.addEventListener('click', () => {
       const j = +btn.dataset.opt;
       quizState.answers[i] = j;
+      fetch('/api/track', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({event: 'quiz_answer', data: {question: i, option: ['A','B','C','D'][j]}})
+      }).catch(() => {});
       $$('#quizBox .quiz-option').forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected');
       setTimeout(() => {
@@ -738,7 +759,10 @@ function renderQuiz() {
   });
 }
 
-$('#quizBackBtn').addEventListener('click', () => { if (quizState.idx > 0) { quizState.idx--; renderQuiz(); } });
+$('#quizBackBtn').addEventListener('click', () => {
+  fetch('/api/track', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({event: 'quiz_back'}) }).catch(() => {});
+  if (quizState.idx > 0) { quizState.idx--; renderQuiz(); }
+});
 
 function showQuizResult() {
   let total = 0;
@@ -759,6 +783,13 @@ function showQuizResult() {
   $('#resultDate').textContent = new Date().toLocaleDateString('zh-CN');
   $('#resultDateLabel').textContent = new Date().toLocaleDateString('zh-CN');
   showOnly('quizResult');
+
+  // 埋点：测试完成
+  fetch('/api/track', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({event: 'quiz_complete', data: {score: normalized}})
+  }).catch(() => {});
 }
 
 let activeTagsPos = new Set();
@@ -779,8 +810,14 @@ bindTagButtons('.tag-btn-neg', activeTagsNeg);
 function submitRecord(textareaId, tagSet, listenerId, tagSelector) {
   const text = $(textareaId).value.trim();
   if (!text) { $(textareaId).focus(); return; }
+  const type = textareaId.includes('Pos') ? 'pos' : 'neg';
   state.records.unshift({ id: Date.now(), text, tags: [...tagSet], listener: $(listenerId).value.trim() || null, createdAt: Date.now() });
   store.save(state);
+  fetch('/api/track', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({event: 'record_submit', data: {type, tags: [...tagSet]}})
+  }).catch(() => {});
   $(textareaId).value = ''; $(listenerId).value = '';
   tagSet.clear(); $$(tagSelector).forEach(b => b.classList.remove('active'));
   renderFeed();
@@ -837,7 +874,10 @@ function renderFeed() {
     list.appendChild(el);
   });
   list.querySelectorAll('[data-del]').forEach(b => {
-    b.addEventListener('click', () => { state.records = state.records.filter(r => r.id != b.dataset.del); store.save(state); renderFeed(); });
+    b.addEventListener('click', () => {
+      fetch('/api/track', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({event: 'record_delete'}) }).catch(() => {});
+      state.records = state.records.filter(r => r.id != b.dataset.del); store.save(state); renderFeed();
+    });
   });
 }
 
@@ -849,6 +889,7 @@ const FORTUNES = [
   '神签：今日心安理得睡至日上三竿', '空签：诸事不发生，此事即糟', '上签：导师今日不会突然召见',
 ];
 $('#drawBtn').addEventListener('click', () => {
+  fetch('/api/track', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({event: 'fortune_draw'}) }).catch(() => {});
   const f = FORTUNES[Math.floor(Math.random() * FORTUNES.length)];
   const box = $('#fortuneText');
   box.style.opacity = '0';
@@ -961,8 +1002,12 @@ function renderQuizHistory() {
   });
 }
 
-$('#refreshBtn').addEventListener('click', renderIndex);
+$('#refreshBtn').addEventListener('click', () => {
+  fetch('/api/track', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({event: 'index_refresh'}) }).catch(() => {});
+  renderIndex();
+});
 $('#shareBtn').addEventListener('click', async () => {
+  fetch('/api/track', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({event: 'share_index'}) }).catch(() => {});
   const node = $('#indexCard');
   $('#shareBtn').textContent = '生成中…';
   try {
@@ -977,6 +1022,7 @@ $('#shareBtn').addEventListener('click', async () => {
 $('#sealBtn').addEventListener('click', () => {
   const text = $('#capsuleText').value.trim();
   if (!text) return;
+  fetch('/api/track', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({event: 'capsule_seal'}) }).catch(() => {});
   const caps = store.loadCapsules();
   caps.unshift({ id: Date.now(), text, sealedAt: Date.now() });
   store.saveCapsules(caps);
@@ -1006,6 +1052,7 @@ function renderCapsules() {
 }
 
 $('#upshoreBtn').addEventListener('click', () => {
+  fetch('/api/track', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({event: 'upshore_click'}) }).catch(() => {});
   const r = computeIndex();
   const days = daysSince(state.firstDay);
   const recs = state.records;
@@ -1027,11 +1074,23 @@ $$('.tab-btn').forEach(btn => {
     $$('.tab-btn').forEach(b => b.classList.remove('tab-active'));
     btn.classList.add('tab-active');
     const t = btn.dataset.tab;
+    fetch('/api/track', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({event: 'tab_switch', data: {tab: t}})
+    }).catch(() => {});
     ['feed','index','capsule'].forEach(n => $(`#tab-${n}`).classList.toggle('hidden', n !== t));
     if (t === 'index') { renderIndex(); renderQuizHistory(); }
     if (t === 'capsule') renderCapsules();
   });
 });
+
+// 埋点：页面浏览
+fetch('/api/track', {
+  method: 'POST',
+  headers: {'Content-Type': 'application/json'},
+  body: JSON.stringify({event: 'pageview'})
+}).catch(() => {});
 </script>
 </body>
 </html>

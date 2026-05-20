@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>彷徨者档案 · 数据看板</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700;900&family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:    #ebe1c8;
+    --paper-2:  #d9cba6;
+    --ink:      #1a1814;
+    --ink-2:    #3a342a;
+    --vermilion:#9b1c1c;
+    --seal:     #b8302e;
+    --tea:      #6b5a3e;
+  }
+  html, body { background: var(--paper); color: var(--ink); font-family: 'Noto Serif SC', serif; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  .brush { font-family: 'Ma Shan Zheng', 'Noto Serif SC', serif; }
+  .lishu { font-family: 'ZCOOL XiaoWei', 'Noto Serif SC', serif; letter-spacing: .1em; }
+  .paper-bg {
+    background:
+      radial-gradient(circle at 12% 28%, rgba(107,90,62,.15) 0, transparent 4%),
+      radial-gradient(circle at 78% 62%, rgba(107,90,62,.12) 0, transparent 5%),
+      var(--paper);
+  }
+  .grid-lines {
+    background-image:
+      linear-gradient(0deg, transparent 31px, rgba(26,24,20,.06) 32px),
+      linear-gradient(90deg, transparent 31px, rgba(26,24,20,.04) 32px);
+    background-size: 32px 32px;
+  }
+  .seal {
+    color: var(--seal);
+    border: 3px double var(--seal);
+    font-weight: 900;
+    letter-spacing: .3em;
+    transform: rotate(-6deg);
+    box-shadow: inset 0 0 0 1px var(--seal);
+    background: rgba(184,48,46,.05);
+  }
+  .seal-square {
+    color: var(--seal);
+    border: 2px solid var(--seal);
+    font-family: 'Ma Shan Zheng', serif;
+    background: rgba(184,48,46,.04);
+  }
+  .double-rule {
+    border-top: 3px double var(--ink);
+    border-bottom: 1px solid var(--ink);
+    padding: 6px 0;
+  }
+  .ink-btn {
+    background: var(--ink); color: var(--paper);
+    transition: all .2s; border: 1px solid var(--ink);
+    font-family: 'Noto Serif SC', serif; font-weight: 700;
+    letter-spacing: .15em; cursor: pointer;
+  }
+  .ink-btn:hover { background: var(--vermilion); border-color: var(--vermilion); }
+  .ghost-btn {
+    border: 1px solid var(--ink-2); color: var(--ink);
+    transition: all .2s; background: transparent; cursor: pointer;
+  }
+  .ghost-btn:hover { background: var(--ink); color: var(--paper); }
+  .stat-card {
+    border: 1px solid var(--ink);
+    background: var(--paper);
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .bar-fill { transition: width 1s ease-out; }
+  .tab-btn { cursor: pointer; opacity: .5; transition: opacity .2s; }
+  .tab-btn:hover, .tab-btn.active { opacity: 1; }
+  .tab-btn.active { color: var(--vermilion); border-bottom: 2px solid var(--vermilion); }
+  .funnel-step { position: relative; }
+  .funnel-arrow {
+    position: absolute; right: -12px; top: 50%; transform: translateY(-50%);
+    font-size: 10px; opacity: .3;
+  }
+</style>
+</head>
+<body>
+
+<div class="max-w-5xl mx-auto px-5 py-10">
+
+  <!-- Header -->
+  <div class="double-rule flex items-center justify-between text-[11px] mono mb-6">
+    <span>DATA · 数据看板</span>
+    <span class="brush text-base">彷徨者档案</span>
+    <span id="refreshTime">加载中...</span>
+  </div>
+
+  <!-- 核心指标 -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+    <div class="stat-card p-5 text-center">
+      <div class="mono text-[10px] opacity-60 tracking-widest mb-2">总 浏 览 量</div>
+      <div class="brush text-4xl text-[var(--vermilion)]" id="totalPv">—</div>
+      <div class="mono text-[10px] opacity-50 mt-1">今日 +<span id="todayPv">—</span></div>
+    </div>
+    <div class="stat-card p-5 text-center">
+      <div class="mono text-[10px] opacity-60 tracking-widest mb-2">测 试 完 成 量</div>
+      <div class="brush text-4xl text-[var(--vermilion)]" id="totalQuiz">—</div>
+      <div class="mono text-[10px] opacity-50 mt-1">今日 +<span id="todayQuiz">—</span></div>
+    </div>
+    <div class="stat-card p-5 text-center">
+      <div class="mono text-[10px] opacity-60 tracking-widest mb-2">平 均 指 数</div>
+      <div class="brush text-4xl" id="avgScore">—</div>
+      <div class="mono text-[10px] opacity-50 mt-1">分 / 100</div>
+    </div>
+    <div class="stat-card p-5 text-center">
+      <div class="mono text-[10px] opacity-60 tracking-widest mb-2">转 化 率</div>
+      <div class="brush text-4xl" id="convRate">—</div>
+      <div class="mono text-[10px] opacity-50 mt-1">浏览→测试</div>
+    </div>
+  </div>
+
+  <!-- Tab Switcher -->
+  <div class="flex gap-6 text-sm tracking-widest border-b border-[var(--ink)]/30 pb-2 mb-6">
+    <button class="tab-btn active pb-1" data-panel="overview">总 览</button>
+    <button class="tab-btn pb-1" data-panel="funnel">漏 斗</button>
+    <button class="tab-btn pb-1" data-panel="quiz">测 试 分 析</button>
+    <button class="tab-btn pb-1" data-panel="archive">档 案 馆</button>
+  </div>
+
+  <!-- Panel: Overview -->
+  <div id="panel-overview" class="space-y-6">
+    <div class="grid md:grid-cols-2 gap-6">
+      <!-- 分数分布 -->
+      <div class="stat-card p-6 grid-lines">
+        <div class="flex items-center justify-between mb-4">
+          <span class="brush text-lg">▍指 数 分 布</span>
+          <span class="seal px-2 py-0.5 text-[10px] mono">LIVE</span>
+        </div>
+        <div class="space-y-3 text-xs">
+          <div class="flex items-center gap-2"><span class="w-16 opacity-60">0–20</span><div class="flex-1 h-2 bg-[var(--ink)]/10 overflow-hidden"><div class="bar-fill h-full bg-[var(--tea)]" id="dist0" style="width:0%"></div></div><span class="w-8 text-right mono" id="dist0Val">0</span></div>
+          <div class="flex items-center gap-2"><span class="w-16 opacity-60">21–40</span><div class="flex-1 h-2 bg-[var(--ink)]/10 overflow-hidden"><div class="bar-fill h-full bg-[var(--tea)]" id="dist1" style="width:0%"></div></div><span class="w-8 text-right mono" id="dist1Val">0</span></div>
+          <div class="flex items-center gap-2"><span class="w-16 opacity-60">41–60</span><div class="flex-1 h-2 bg-[var(--ink)]/10 overflow-hidden"><div class="bar-fill h-full bg-[var(--ink-2)]" id="dist2" style="width:0%"></div></div><span class="w-8 text-right mono" id="dist2Val">0</span></div>
+          <div class="flex items-center gap-2"><span class="w-16 opacity-60">61–80</span><div class="flex-1 h-2 bg-[var(--ink)]/10 overflow-hidden"><div class="bar-fill h-full bg-[var(--vermilion)]" id="dist3" style="width:0%"></div></div><span class="w-8 text-right mono" id="dist3Val">0</span></div>
+          <div class="flex items-center gap-2"><span class="w-16 opacity-60">81–100</span><div class="flex-1 h-2 bg-[var(--ink)]/10 overflow-hidden"><div class="bar-fill h-full bg-[var(--vermilion)]" id="dist4" style="width:0%"></div></div><span class="w-8 text-right mono" id="dist4Val">0</span></div>
+        </div>
+      </div>
+
+      <!-- 段位分布 -->
+      <div class="stat-card p-6 grid-lines">
+        <div class="flex items-center justify-between mb-4">
+          <span class="brush text-lg">▍段 位 分 布</span>
+          <span class="seal px-2 py-0.5 text-[10px] mono">LIVE</span>
+        </div>
+        <div id="rankDist" class="space-y-2 text-xs"></div>
+      </div>
+    </div>
+
+    <!-- 标签排行 -->
+    <div class="stat-card p-6 grid-lines">
+      <div class="flex items-center justify-between mb-4">
+        <span class="brush text-lg">▍标 签 使 用 排 行</span>
+        <span class="mono text-[10px] opacity-50">碎碎念标签</span>
+      </div>
+      <div id="tagRanking" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+    </div>
+  </div>
+
+  <!-- Panel: Funnel -->
+  <div id="panel-funnel" class="hidden space-y-6">
+    <div class="stat-card p-6 grid-lines">
+      <div class="flex items-center justify-between mb-6">
+        <span class="brush text-lg">▍测 试 漏 斗</span>
+        <span class="mono text-[10px] opacity-50">从首页到档案馆</span>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="funnel-step text-center p-4 border border-[var(--ink)]/20">
+          <div class="mono text-[10px] opacity-60 mb-1">打开页面</div>
+          <div class="brush text-2xl" id="funnelPv">—</div>
+          <div class="mono text-[10px] opacity-40 mt-1">100%</div>
+        </div>
+        <div class="funnel-step text-center p-4 border border-[var(--ink)]/20 relative">
+          <div class="funnel-arrow hidden md:block">→</div>
+          <div class="mono text-[10px] opacity-60 mb-1">开始测试</div>
+          <div class="brush text-2xl text-[var(--vermilion)]" id="funnelStart">—</div>
+          <div class="mono text-[10px] opacity-40 mt-1" id="funnelStartRate">—</div>
+        </div>
+        <div class="funnel-step text-center p-4 border border-[var(--ink)]/20 relative">
+          <div class="funnel-arrow hidden md:block">→</div>
+          <div class="mono text-[10px] opacity-60 mb-1">完成测试</div>
+          <div class="brush text-2xl text-[var(--vermilion)]" id="funnelComplete">—</div>
+          <div class="mono text-[10px] opacity-40 mt-1" id="funnelCompleteRate">—</div>
+        </div>
+        <div class="funnel-step text-center p-4 border border-[var(--ink)]/20 relative">
+          <div class="funnel-arrow hidden md:block">→</div>
+          <div class="mono text-[10px] opacity-60 mb-1">进入档案馆</div>
+          <div class="brush text-2xl" id="funnelEnter">—</div>
+          <div class="mono text-[10px] opacity-40 mt-1" id="funnelEnterRate">—</div>
+        </div>
+      </div>
+      <div class="mt-6 pt-4 border-t border-dashed border-[var(--ink)]/20 grid grid-cols-2 md:grid-cols-4 gap-4 text-center text-xs">
+        <div><span class="opacity-60">中途放弃率</span><div class="brush text-lg text-[var(--vermilion)] mt-1" id="skipRate">—</div></div>
+        <div><span class="opacity-60">重测率</span><div class="brush text-lg mt-1" id="retakeRate">—</div></div>
+        <div><span class="opacity-60">分享诊断书</span><div class="brush text-lg mt-1" id="shareResultStat">—</div></div>
+        <div><span class="opacity-60">分享指数报告</span><div class="brush text-lg mt-1" id="shareIndexStat">—</div></div>
+      </div>
+    </div>
+
+    <div class="stat-card p-6 grid-lines">
+      <div class="flex items-center justify-between mb-4">
+        <span class="brush text-lg">▍进 入 方 式</span>
+      </div>
+      <div class="grid grid-cols-2 gap-4 text-center">
+        <div class="p-4 border border-[var(--ink)]/20">
+          <div class="mono text-[10px] opacity-60">做完测试进入</div>
+          <div class="brush text-2xl mt-1" id="enterViaQuiz">—</div>
+        </div>
+        <div class="p-4 border border-[var(--ink)]/20">
+          <div class="mono text-[10px] opacity-60">直接跳过进入</div>
+          <div class="brush text-2xl mt-1" id="enterViaSkip">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel: Quiz Analysis -->
+  <div id="panel-quiz" class="hidden space-y-6">
+    <div class="stat-card p-6 grid-lines">
+      <div class="flex items-center justify-between mb-4">
+        <span class="brush text-lg">▍题 目 选 项 分 布</span>
+        <span class="mono text-[10px] opacity-50">每道题各选项占比</span>
+      </div>
+      <div id="questionDist" class="space-y-4 max-h-[600px] overflow-y-auto pr-2"></div>
+    </div>
+  </div>
+
+  <!-- Panel: Archive -->
+  <div id="panel-archive" class="hidden space-y-6">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="stat-card p-5 text-center">
+        <div class="mono text-[10px] opacity-60 tracking-widest mb-2">好 事 记 录</div>
+        <div class="brush text-3xl" id="statPos">—</div>
+      </div>
+      <div class="stat-card p-5 text-center">
+        <div class="mono text-[10px] opacity-60 tracking-widest mb-2">坏 事 记 录</div>
+        <div class="brush text-3xl text-[var(--vermilion)]" id="statNeg">—</div>
+      </div>
+      <div class="stat-card p-5 text-center">
+        <div class="mono text-[10px] opacity-60 tracking-widest mb-2">抽 签 次 数</div>
+        <div class="brush text-3xl" id="statFortune">—</div>
+      </div>
+      <div class="stat-card p-5 text-center">
+        <div class="mono text-[10px] opacity-60 tracking-widest mb-2">上 岸 点 击</div>
+        <div class="brush text-3xl text-[var(--vermilion)]" id="statUpshore">—</div>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="stat-card p-6 grid-lines">
+        <div class="flex items-center justify-between mb-4">
+          <span class="brush text-lg">▍Tab 切 换 分 布</span>
+        </div>
+        <div class="space-y-3" id="tabDist"></div>
+      </div>
+      <div class="stat-card p-6 grid-lines">
+        <div class="flex items-center justify-between mb-4">
+          <span class="brush text-lg">▍时 光 胶 囊</span>
+        </div>
+        <div class="grid grid-cols-2 gap-4 text-center">
+          <div class="p-3 border border-[var(--ink)]/20">
+            <div class="mono text-[10px] opacity-60">封存</div>
+            <div class="brush text-xl mt-1" id="statSeal">—</div>
+          </div>
+          <div class="p-3 border border-[var(--ink)]/20">
+            <div class="mono text-[10px] opacity-60">拆封</div>
+            <div class="brush text-xl mt-1" id="statOpen">—</div>
+          </div>
+        </div>
+        <div class="mt-4 pt-3 border-t border-dashed border-[var(--ink)]/20 text-center">
+          <div class="mono text-[10px] opacity-60">好事/坏事比例</div>
+          <div class="brush text-2xl mt-1" id="posNegRatio">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="text-center mt-8">
+    <button id="refreshBtn" class="ink-btn px-6 py-2.5 text-sm">↻ 刷 新 数 据</button>
+    <a href="/" class="inline-block ml-3 text-sm opacity-60 hover:opacity-100 underline underline-offset-4">返回首页</a>
+  </div>
+
+  <div class="mt-10 text-center mono text-[10px] opacity-40 tracking-widest">
+    PEN.WHINING-ERA // 数据看板 // v2.0
+  </div>
+</div>
+
+<script>
+let currentData = null;
+
+async function loadStats() {
+  try {
+    const res = await fetch('/api/stats');
+    currentData = await res.json();
+    renderOverview(currentData);
+    renderFunnel(currentData);
+    renderQuiz(currentData);
+    renderArchive(currentData);
+    $('#refreshTime').textContent = new Date().toLocaleTimeString('zh-CN');
+  } catch (e) {
+    $('#refreshTime').textContent = '获取失败';
+    console.error(e);
+  }
+}
+
+function renderOverview(d) {
+  $('#totalPv').textContent = d.traffic.pv.toLocaleString();
+  $('#todayPv').textContent = d.traffic.pvToday.toLocaleString();
+  $('#totalQuiz').textContent = d.funnel.completes.toLocaleString();
+  $('#todayQuiz').textContent = d.funnel.completesToday.toLocaleString();
+  $('#avgScore').textContent = d.quiz.avgScore || '—';
+
+  const conv = d.traffic.pv > 0 ? ((d.funnel.completes / d.traffic.pv) * 100).toFixed(1) + '%' : '0%';
+  $('#convRate').textContent = conv;
+
+  // 分数分布
+  const dist = d.quiz.distribution;
+  const maxDist = Math.max(1, ...dist);
+  dist.forEach((v, i) => {
+    $(`#dist${i}`).style.width = (v / maxDist * 100) + '%';
+    $(`#dist${i}Val`).textContent = v;
+  });
+
+  // 段位分布
+  const rankContainer = $('#rankDist');
+  const maxRank = Math.max(1, ...d.quiz.rankDistribution.map(r => r.count));
+  rankContainer.innerHTML = d.quiz.rankDistribution.map(r => `
+    <div class="flex items-center gap-2">
+      <span class="w-20 opacity-70">${r.label}</span>
+      <div class="flex-1 h-2 bg-[var(--ink)]/10 overflow-hidden">
+        <div class="bar-fill h-full bg-[var(--vermilion)]" style="width:${r.count / maxRank * 100}%"></div>
+      </div>
+      <span class="w-8 text-right mono">${r.count}</span>
+    </div>
+  `).join('');
+
+  // 标签排行
+  const tagContainer = $('#tagRanking');
+  const maxTag = Math.max(1, ...d.tags.map(t => t.count));
+  tagContainer.innerHTML = d.tags.map(t => `
+    <div class="p-3 border border-[var(--ink)]/20 text-center">
+      <div class="text-xs opacity-60 mb-1">#${t.tag}</div>
+      <div class="brush text-xl">${t.count}</div>
+      <div class="w-full h-1 bg-[var(--ink)]/10 mt-2 overflow-hidden">
+        <div class="bar-fill h-full bg-[var(--tea)]" style="width:${t.count / maxTag * 100}%"></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderFunnel(d) {
+  $('#funnelPv').textContent = d.traffic.pv.toLocaleString();
+  $('#funnelStart').textContent = d.funnel.starts.toLocaleString();
+  $('#funnelComplete').textContent = d.funnel.completes.toLocaleString();
+  $('#funnelEnter').textContent = d.result.enterApp.toLocaleString();
+
+  $('#funnelStartRate').textContent = d.traffic.pv > 0 ? ((d.funnel.starts / d.traffic.pv) * 100).toFixed(1) + '%' : '0%';
+  $('#funnelCompleteRate').textContent = d.funnel.starts > 0 ? ((d.funnel.completes / d.funnel.starts) * 100).toFixed(1) + '%' : '0%';
+  $('#funnelEnterRate').textContent = d.funnel.completes > 0 ? ((d.result.enterApp / d.funnel.completes) * 100).toFixed(1) + '%' : '0%';
+
+  $('#skipRate').textContent = d.funnel.skipRate + '%';
+  $('#retakeRate').textContent = d.funnel.retakeRate + '%';
+  $('#shareResultStat').textContent = d.result.shareResult.toLocaleString();
+  $('#shareIndexStat').textContent = d.result.shareIndex.toLocaleString();
+
+  $('#enterViaQuiz').textContent = d.result.enterApp.toLocaleString();
+  $('#enterViaSkip').textContent = d.result.skipQuiz.toLocaleString();
+}
+
+function renderQuiz(d) {
+  const container = $('#questionDist');
+  container.innerHTML = d.questions.map((q, idx) => {
+    const maxOpt = Math.max(1, ...q.options.map(o => o.count));
+    return `
+      <div class="pb-3 border-b border-dashed border-[var(--ink)]/10 ${idx === d.questions.length - 1 ? 'border-b-0' : ''}">
+        <div class="flex items-center justify-between mb-2">
+          <span class="brush text-sm">第 ${q.question} 题</span>
+          <span class="mono text-[10px] opacity-50">共 ${q.total} 人作答</span>
+        </div>
+        <div class="grid grid-cols-4 gap-2">
+          ${q.options.map(o => `
+            <div class="text-center p-2 border border-[var(--ink)]/10 ${o.count === Math.max(...q.options.map(x => x.count)) && o.count > 0 ? 'bg-[var(--vermilion)]/5 border-[var(--vermilion)]/30' : ''}">
+              <div class="mono text-xs opacity-60">${o.option}</div>
+              <div class="brush text-lg mt-1">${o.count}</div>
+              <div class="mono text-[10px] opacity-50">${o.pct}%</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderArchive(d) {
+  $('#statPos').textContent = d.archive.recordPos.toLocaleString();
+  $('#statNeg').textContent = d.archive.recordNeg.toLocaleString();
+  $('#statFortune').textContent = d.archive.fortuneDraws.toLocaleString();
+  $('#statUpshore').textContent = d.archive.upshoreClicks.toLocaleString();
+  $('#statSeal').textContent = d.archive.capsuleSeals.toLocaleString();
+  $('#statOpen').textContent = d.archive.capsuleOpens.toLocaleString();
+  $('#posNegRatio').textContent = d.archive.posNegRatio;
+
+  const tabs = [
+    { key: 'feed', label: '碎碎念', count: d.archive.tabFeed },
+    { key: 'index', label: '指数', count: d.archive.tabIndex },
+    { key: 'capsule', label: '胶囊', count: d.archive.tabCapsule }
+  ];
+  const maxTab = Math.max(1, ...tabs.map(t => t.count));
+  $('#tabDist').innerHTML = tabs.map(t => `
+    <div class="flex items-center gap-2">
+      <span class="w-16 opacity-70">${t.label}</span>
+      <div class="flex-1 h-2 bg-[var(--ink)]/10 overflow-hidden">
+        <div class="bar-fill h-full bg-[var(--ink-2)]" style="width:${t.count / maxTab * 100}%"></div>
+      </div>
+      <span class="w-8 text-right mono">${t.count}</span>
+    </div>
+  `).join('');
+}
+
+function $(s) { return document.querySelector(s); }
+function $$(s) { return document.querySelectorAll(s); }
+
+// Tab switching
+$$('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    $$('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const panel = btn.dataset.panel;
+    ['overview', 'funnel', 'quiz', 'archive'].forEach(p => {
+      $(`#panel-${p}`).classList.toggle('hidden', p !== panel);
+    });
+  });
+});
+
+$('#refreshBtn').addEventListener('click', () => {
+  $('#refreshBtn').textContent = '加载中...';
+  loadStats().then(() => { $('#refreshBtn').textContent = '↻ 刷 新 数 据'; });
+});
+
+loadStats();
+setInterval(loadStats, 60000);
+</script>
+
+</body>
+</html>
